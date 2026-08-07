@@ -4,68 +4,72 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="bg-black text-white shadow-md sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+    <header className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md shadow-lg border-b border-yellow-500/20">
+      <nav className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 
         {/* Logo */}
-        <h1 className="text-2xl font-bold text-orange-500">
-          Kanha Restaurant
+        <h1 className="text-3xl font-extrabold text-yellow-400 tracking-wide cursor-pointer">
+          Kanha <span className="text-white">Restaurant</span>
         </h1>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-8 font-medium">
+        <ul className="hidden md:flex items-center gap-8 text-white font-medium">
+
           <li>
-            <a href="#home" className="hover:text-orange-500">
+            <a href="#home" className="hover:text-yellow-400 duration-300">
               Home
             </a>
           </li>
 
           <li>
-            <a href="#menu" className="hover:text-orange-500">
+            <a href="#menu" className="hover:text-yellow-400 duration-300">
               Menu
             </a>
           </li>
 
           <li>
-            <a href="#about" className="hover:text-orange-500">
+            <a href="#about" className="hover:text-yellow-400 duration-300">
               About
             </a>
           </li>
 
           <li>
-            <a href="#gallery" className="hover:text-orange-500">
+            <a href="#gallery" className="hover:text-yellow-400 duration-300">
               Gallery
             </a>
           </li>
 
           <li>
-            <a href="#contact" className="hover:text-orange-500">
+            <a href="#contact" className="hover:text-yellow-400 duration-300">
               Contact
             </a>
           </li>
+
         </ul>
 
-        {/* Desktop Book Table Button */}
+        {/* Book Button */}
         <a
-          href="#table-booking"
-          className="hidden md:block bg-orange-500 px-5 py-2 rounded-lg hover:bg-orange-600 transition"
+          href="#booking"
+          className="hidden md:block bg-yellow-400 text-black font-semibold px-6 py-3 rounded-full hover:bg-yellow-300 hover:scale-105 duration-300 shadow-lg"
         >
           Book Table
         </a>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-3xl"
           onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden text-yellow-400 text-3xl"
         >
           ☰
         </button>
+
       </nav>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-black border-t border-gray-700">
-          <ul className="flex flex-col text-center py-4 space-y-4">
+        <div className="md:hidden bg-black border-t border-yellow-500/30">
+
+          <ul className="flex flex-col items-center py-6 gap-6 text-white">
 
             <li>
               <a href="#home" onClick={() => setMenuOpen(false)}>
@@ -99,15 +103,16 @@ function Header() {
 
             <li>
               <a
-                href="#table-booking"
+                href="#booking"
                 onClick={() => setMenuOpen(false)}
-                className="inline-block bg-orange-500 px-5 py-2 rounded-lg hover:bg-orange-600 transition"
+                className="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold"
               >
                 Book Table
               </a>
             </li>
 
           </ul>
+
         </div>
       )}
     </header>
