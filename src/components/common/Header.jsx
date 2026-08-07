@@ -49,7 +49,7 @@ function Header() {
 
         {/* Book Button */}
         <a
-          href="#booking"
+          href="#table-booking"
           className="hidden md:block bg-yellow-400 text-black font-semibold px-6 py-3 rounded-full hover:bg-yellow-300 hover:scale-105 duration-300 shadow-lg"
         >
           Book Table
