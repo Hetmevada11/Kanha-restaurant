@@ -103,7 +103,7 @@ function Header() {
 
             <li>
               <a
-                href="#booking"
+                href="#table-booking"
                 onClick={() => setMenuOpen(false)}
                 className="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold"
               >
