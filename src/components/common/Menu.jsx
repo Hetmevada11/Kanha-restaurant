@@ -79,7 +79,6 @@ function Menu() {
     "Indian",
   ];
 
-  // Search + Category Filter
   const filteredItems = menuItems.filter((item) => {
     const matchesSearch = item.name
       .toLowerCase()
@@ -91,7 +90,6 @@ function Menu() {
     return matchesSearch && matchesCategory;
   });
 
-  // Add to Cart
   const addToCart = (item) => {
     setCart((currentCart) => {
       const existingItem = currentCart.find(
@@ -113,7 +111,6 @@ function Menu() {
     });
   };
 
-  // Increase Quantity
   const increaseQuantity = (id) => {
     setCart((currentCart) =>
       currentCart.map((item) =>
@@ -127,7 +124,6 @@ function Menu() {
     );
   };
 
-  // Decrease Quantity
   const decreaseQuantity = (id) => {
     setCart((currentCart) =>
       currentCart
@@ -143,14 +139,12 @@ function Menu() {
     );
   };
 
-  // Remove Item
   const removeFromCart = (id) => {
     setCart((currentCart) =>
       currentCart.filter((item) => item.id !== id)
     );
   };
 
-  // Favourite
   const toggleFavorite = (id) => {
     setFavorites((currentFavorites) =>
       currentFavorites.includes(id)
@@ -159,17 +153,50 @@ function Menu() {
     );
   };
 
-  // Cart Total
   const cartTotal = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  // Cart Items Count
   const cartCount = cart.reduce(
     (total, item) => total + item.quantity,
     0
   );
+
+  // WhatsApp Order
+  const orderOnWhatsApp = () => {
+    if (cart.length === 0) {
+      alert("Please add some food to your cart first.");
+      return;
+    }
+
+    const orderDetails = cart
+      .map(
+        (item) =>
+          `🍽️ ${item.name} × ${item.quantity} = ₹${
+            item.price * item.quantity
+          }`
+      )
+      .join("\n");
+
+    const message = `Hello Kanha Restaurant 👋
+
+I would like to place an order:
+
+${orderDetails}
+
+💰 Total: ₹${cartTotal}
+
+Please confirm my order.
+
+Thank you! 😊`;
+
+    const whatsappURL = `https://wa.me/918160815662?text=${encodeURIComponent(
+      message
+    )}`;
+
+    window.open(whatsappURL, "_blank");
+  };
 
   return (
     <section
@@ -194,17 +221,15 @@ function Menu() {
           </p>
         </div>
 
-        {/* Search Bar */}
+        {/* Search */}
         <div className="max-w-2xl mx-auto mb-8">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="🔍 Search your favourite food..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-gray-800 border border-yellow-500/30 text-white px-6 py-4 rounded-full outline-none focus:border-yellow-400 transition placeholder-gray-400"
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="🔍 Search your favourite food..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full bg-gray-800 border border-yellow-500/30 text-white px-6 py-4 rounded-full outline-none focus:border-yellow-400 transition placeholder-gray-400"
+          />
         </div>
 
         {/* Categories */}
@@ -224,7 +249,7 @@ function Menu() {
           ))}
         </div>
 
-        {/* Cart Summary */}
+        {/* Cart */}
         {cart.length > 0 && (
           <div className="mb-12 bg-gray-900 border border-yellow-500/30 rounded-3xl p-6 shadow-xl">
 
@@ -241,6 +266,7 @@ function Menu() {
 
               <div className="text-left md:text-right">
                 <p className="text-gray-400">Total</p>
+
                 <p className="text-3xl font-bold text-yellow-400">
                   ₹{cartTotal}
                 </p>
@@ -302,17 +328,14 @@ function Menu() {
               ))}
             </div>
 
-            {/* Checkout Button */}
+            {/* WhatsApp Order */}
             <button
-              onClick={() =>
-                alert(
-                  `Your order total is ₹${cartTotal}. Online checkout will be added next.`
-                )
-              }
-              className="mt-6 w-full bg-yellow-400 text-black py-4 rounded-full font-bold text-lg hover:bg-yellow-300 transition"
+              onClick={orderOnWhatsApp}
+              className="mt-6 w-full bg-green-500 text-white py-4 rounded-full font-bold text-lg hover:bg-green-400 transition"
             >
-              Proceed to Checkout →
+              📱 Order on WhatsApp →
             </button>
+
           </div>
         )}
 
@@ -334,12 +357,10 @@ function Menu() {
                     className="w-full h-60 object-cover"
                   />
 
-                  {/* Badge */}
                   <span className="absolute top-4 left-4 bg-yellow-400 text-black text-xs px-3 py-2 rounded-full font-bold">
                     {item.badge}
                   </span>
 
-                  {/* Favourite */}
                   <button
                     onClick={() => toggleFavorite(item.id)}
                     className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition ${
@@ -365,22 +386,18 @@ function Menu() {
                     </span>
                   </div>
 
-                  {/* Rating */}
                   <p className="text-yellow-400 mt-3">
                     ⭐ {item.rating}
                   </p>
 
-                  {/* Category */}
                   <p className="text-gray-400 text-sm mt-2">
                     {item.category}
                   </p>
 
-                  {/* Price */}
                   <p className="text-yellow-400 text-3xl font-bold mt-3">
                     ₹{item.price}
                   </p>
 
-                  {/* Add To Cart */}
                   <button
                     onClick={() => addToCart(item)}
                     className="mt-6 w-full bg-yellow-400 text-black py-3 rounded-full font-bold hover:bg-yellow-300 transition"
@@ -394,7 +411,6 @@ function Menu() {
 
           </div>
         ) : (
-          /* No Results */
           <div className="text-center py-16">
             <p className="text-5xl mb-4">🍽️</p>
 
