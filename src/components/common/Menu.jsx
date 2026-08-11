@@ -70,6 +70,13 @@ function Menu() {
   const [cart, setCart] = useState([]);
   const [favorites, setFavorites] = useState([]);
 
+  // Customer Details
+  const [customerName, setCustomerName] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [orderType, setOrderType] = useState("Dine-in");
+  const [instructions, setInstructions] = useState("");
+
   const categories = [
     "All",
     "Pizza",
@@ -79,6 +86,7 @@ function Menu() {
     "Indian",
   ];
 
+  // Search + Category Filter
   const filteredItems = menuItems.filter((item) => {
     const matchesSearch = item.name
       .toLowerCase()
@@ -90,6 +98,7 @@ function Menu() {
     return matchesSearch && matchesCategory;
   });
 
+  // Add to Cart
   const addToCart = (item) => {
     setCart((currentCart) => {
       const existingItem = currentCart.find(
@@ -111,6 +120,7 @@ function Menu() {
     });
   };
 
+  // Increase Quantity
   const increaseQuantity = (id) => {
     setCart((currentCart) =>
       currentCart.map((item) =>
@@ -124,6 +134,7 @@ function Menu() {
     );
   };
 
+  // Decrease Quantity
   const decreaseQuantity = (id) => {
     setCart((currentCart) =>
       currentCart
@@ -139,12 +150,14 @@ function Menu() {
     );
   };
 
+  // Remove Item
   const removeFromCart = (id) => {
     setCart((currentCart) =>
       currentCart.filter((item) => item.id !== id)
     );
   };
 
+  // Favourite
   const toggleFavorite = (id) => {
     setFavorites((currentFavorites) =>
       currentFavorites.includes(id)
@@ -153,11 +166,13 @@ function Menu() {
     );
   };
 
+  // Cart Total
   const cartTotal = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
+  // Cart Count
   const cartCount = cart.reduce(
     (total, item) => total + item.quantity,
     0
@@ -167,6 +182,26 @@ function Menu() {
   const orderOnWhatsApp = () => {
     if (cart.length === 0) {
       alert("Please add some food to your cart first.");
+      return;
+    }
+
+    if (!customerName.trim()) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    if (!mobileNumber.trim()) {
+      alert("Please enter your mobile number.");
+      return;
+    }
+
+    if (!/^[0-9]{10}$/.test(mobileNumber)) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    if (!address.trim()) {
+      alert("Please enter your address.");
       return;
     }
 
@@ -181,11 +216,20 @@ function Menu() {
 
     const message = `Hello Kanha Restaurant 👋
 
-I would like to place an order:
+I would like to place an order.
 
+👤 Customer Name: ${customerName}
+📱 Mobile Number: ${mobileNumber}
+📍 Address: ${address}
+🍽️ Order Type: ${orderType}
+
+📋 Order Details:
 ${orderDetails}
 
 💰 Total: ₹${cartTotal}
+
+📝 Special Instructions:
+${instructions || "No special instructions"}
 
 Please confirm my order.
 
@@ -253,6 +297,7 @@ Thank you! 😊`;
         {cart.length > 0 && (
           <div className="mb-12 bg-gray-900 border border-yellow-500/30 rounded-3xl p-6 shadow-xl">
 
+            {/* Cart Header */}
             <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
               <div>
                 <h3 className="text-2xl font-bold text-yellow-400">
@@ -265,7 +310,9 @@ Thank you! 😊`;
               </div>
 
               <div className="text-left md:text-right">
-                <p className="text-gray-400">Total</p>
+                <p className="text-gray-400">
+                  Total
+                </p>
 
                 <p className="text-3xl font-bold text-yellow-400">
                   ₹{cartTotal}
@@ -281,6 +328,7 @@ Thank you! 😊`;
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-800 rounded-2xl p-4"
                 >
                   <div className="flex items-center gap-4">
+
                     <img
                       src={item.image}
                       alt={item.name}
@@ -296,9 +344,11 @@ Thank you! 😊`;
                         ₹{item.price}
                       </p>
                     </div>
+
                   </div>
 
                   <div className="flex items-center gap-3">
+
                     <button
                       onClick={() => decreaseQuantity(item.id)}
                       className="w-9 h-9 rounded-full bg-gray-700 hover:bg-yellow-400 hover:text-black transition font-bold"
@@ -323,18 +373,127 @@ Thank you! 😊`;
                     >
                       🗑️
                     </button>
+
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* WhatsApp Order */}
-            <button
-              onClick={orderOnWhatsApp}
-              className="mt-6 w-full bg-green-500 text-white py-4 rounded-full font-bold text-lg hover:bg-green-400 transition"
-            >
-              📱 Order on WhatsApp →
-            </button>
+            {/* Customer Details */}
+            <div className="mt-8 bg-gray-800 rounded-3xl p-6">
+
+              <h3 className="text-2xl font-bold text-yellow-400 mb-6">
+                👤 Customer Details
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                {/* Name */}
+                <div>
+                  <label className="block text-gray-300 mb-2">
+                    Customer Name *
+                  </label>
+
+                  <input
+                    type="text"
+                    value={customerName}
+                    onChange={(e) =>
+                      setCustomerName(e.target.value)
+                    }
+                    placeholder="Enter your name"
+                    className="w-full bg-gray-900 border border-gray-700 text-white px-5 py-3 rounded-xl outline-none focus:border-yellow-400"
+                  />
+                </div>
+
+                {/* Mobile */}
+                <div>
+                  <label className="block text-gray-300 mb-2">
+                    Mobile Number *
+                  </label>
+
+                  <input
+                    type="tel"
+                    value={mobileNumber}
+                    onChange={(e) =>
+                      setMobileNumber(
+                        e.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 10)
+                      )
+                    }
+                    placeholder="Enter 10-digit mobile number"
+                    className="w-full bg-gray-900 border border-gray-700 text-white px-5 py-3 rounded-xl outline-none focus:border-yellow-400"
+                  />
+                </div>
+
+                {/* Address */}
+                <div className="md:col-span-2">
+                  <label className="block text-gray-300 mb-2">
+                    📍 Address *
+                  </label>
+
+                  <textarea
+                    value={address}
+                    onChange={(e) =>
+                      setAddress(e.target.value)
+                    }
+                    placeholder="Enter your complete address"
+                    rows="3"
+                    className="w-full bg-gray-900 border border-gray-700 text-white px-5 py-3 rounded-xl outline-none focus:border-yellow-400 resize-none"
+                  />
+                </div>
+
+                {/* Order Type */}
+                <div>
+                  <label className="block text-gray-300 mb-2">
+                    Order Type
+                  </label>
+
+                  <select
+                    value={orderType}
+                    onChange={(e) =>
+                      setOrderType(e.target.value)
+                    }
+                    className="w-full bg-gray-900 border border-gray-700 text-white px-5 py-3 rounded-xl outline-none focus:border-yellow-400"
+                  >
+                    <option value="Dine-in">
+                      🍽️ Dine-in
+                    </option>
+
+                    <option value="Takeaway">
+                      🥡 Takeaway
+                    </option>
+                  </select>
+                </div>
+
+                {/* Instructions */}
+                <div>
+                  <label className="block text-gray-300 mb-2">
+                    📝 Special Instructions
+                  </label>
+
+                  <input
+                    type="text"
+                    value={instructions}
+                    onChange={(e) =>
+                      setInstructions(e.target.value)
+                    }
+                    placeholder="Less spicy, no onion, etc."
+                    className="w-full bg-gray-900 border border-gray-700 text-white px-5 py-3 rounded-xl outline-none focus:border-yellow-400"
+                  />
+                </div>
+
+              </div>
+
+              {/* WhatsApp Button */}
+              <button
+                onClick={orderOnWhatsApp}
+                className="mt-6 w-full bg-green-500 text-white py-4 rounded-full font-bold text-lg hover:bg-green-400 transition shadow-lg"
+              >
+                📱 Confirm Order on WhatsApp →
+              </button>
+
+            </div>
 
           </div>
         )}
@@ -351,6 +510,7 @@ Thank you! 😊`;
 
                 {/* Image */}
                 <div className="relative">
+
                   <img
                     src={item.image}
                     alt={item.name}
@@ -361,22 +521,29 @@ Thank you! 😊`;
                     {item.badge}
                   </span>
 
+                  {/* Favourite */}
                   <button
-                    onClick={() => toggleFavorite(item.id)}
+                    onClick={() =>
+                      toggleFavorite(item.id)
+                    }
                     className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition ${
                       favorites.includes(item.id)
                         ? "bg-red-500 text-white"
                         : "bg-black/70 text-white hover:bg-red-500"
                     }`}
                   >
-                    {favorites.includes(item.id) ? "♥" : "♡"}
+                    {favorites.includes(item.id)
+                      ? "♥"
+                      : "♡"}
                   </button>
+
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
 
                   <div className="flex justify-between items-start gap-3">
+
                     <h3 className="text-2xl font-bold text-white">
                       {item.name}
                     </h3>
@@ -384,6 +551,7 @@ Thank you! 😊`;
                     <span className="text-xs bg-green-500 text-white px-2 py-1 rounded">
                       VEG
                     </span>
+
                   </div>
 
                   <p className="text-yellow-400 mt-3">
@@ -406,13 +574,17 @@ Thank you! 😊`;
                   </button>
 
                 </div>
+
               </div>
             ))}
 
           </div>
         ) : (
           <div className="text-center py-16">
-            <p className="text-5xl mb-4">🍽️</p>
+
+            <p className="text-5xl mb-4">
+              🍽️
+            </p>
 
             <h3 className="text-2xl font-bold text-white">
               No Food Found
@@ -421,6 +593,7 @@ Thank you! 😊`;
             <p className="text-gray-400 mt-2">
               Try another food name or category.
             </p>
+
           </div>
         )}
 
